@@ -1,4 +1,5 @@
-﻿using ProxyGen;
+﻿using CodeGenHelper;
+using ProxyGen;
 using ProxyGen.SignalR;
 using System;
 using System.Collections.Generic;
@@ -21,35 +22,35 @@ namespace ProxyGenTests
         [Fact]
         public void GenericTypeToString()
         {
-            var rval = GenericTypeUtils.UnrollGenericType(typeof(IList<int>));
+            var rval = GenericTypeUtils.UnrollGenericTypeToString(typeof(IList<int>));
             Assert.Equal("System.Collections.Generic.IList<System.Int32>", rval);
         }
 
         [Fact]
         public void NestedGenericTypeToString()
         {
-            var rval = GenericTypeUtils.UnrollGenericType(typeof(IList<IList<int>>));
+            var rval = GenericTypeUtils.UnrollGenericTypeToString(typeof(IList<IList<int>>));
             Assert.Equal("System.Collections.Generic.IList<System.Collections.Generic.IList<System.Int32>>", rval);
         }
 
         [Fact]
         public void GenericTwoTypesToString()
         {
-            var rval = GenericTypeUtils.UnrollGenericType(typeof(Tuple<int, double>));
+            var rval = GenericTypeUtils.UnrollGenericTypeToString(typeof(Tuple<int, double>));
             Assert.Equal("System.Tuple<System.Int32,System.Double>", rval);
         }
 
         [Fact]
         public void GenericThreeTypesToString()
         {
-            var rval = GenericTypeUtils.UnrollGenericType(typeof(Tuple<int, double, string>));
+            var rval = GenericTypeUtils.UnrollGenericTypeToString(typeof(Tuple<int, double, string>));
             Assert.Equal("System.Tuple<System.Int32,System.Double,System.String>", rval);
         }
 
         [Fact]
         public void GenericNestedTwoTypesToString()
         {
-            var rval = GenericTypeUtils.UnrollGenericType(typeof(Tuple<Tuple<int, double>, Tuple<string, short>>));
+            var rval = GenericTypeUtils.UnrollGenericTypeToString(typeof(Tuple<Tuple<int, double>, Tuple<string, short>>));
             Assert.Equal("System.Tuple<System.Tuple<System.Int32,System.Double>,System.Tuple<System.String,System.Int16>>", rval);
         }        
     }

@@ -28,5 +28,38 @@ namespace ProxyGenTests
 
             output.WriteLine(b.GenerateFactoryCode());
         }
+
+        [Fact]
+        public void NoParamsReturnTaskT()
+        {
+            var b = new ProxyBuilder(typeof(IFactory<INoParamReturnTaskT>), typeof(INoParamReturnTaskT),
+                SignalRCoreProxy.ServerProxyCodeGen);
+
+            output.WriteLine(b.GenerateProxyCode(true));
+
+            output.WriteLine(b.GenerateFactoryCode());
+        }
+
+        [Fact]
+        public void OneParamReturnTask()
+        {
+            var b = new ProxyBuilder(typeof(IFactory<IOneParamReturnTask>), typeof(IOneParamReturnTask),
+                SignalRCoreProxy.ServerProxyCodeGen);
+
+            output.WriteLine(b.GenerateProxyCode(true));
+
+            output.WriteLine(b.GenerateFactoryCode());
+        }
+
+        [Fact]
+        public void OneParamReturnTaskT()
+        {
+            var b = new ProxyBuilder(typeof(IFactory<IOneParamReturnTaskT>), typeof(IOneParamReturnTaskT),
+                SignalRCoreProxy.ServerProxyCodeGen);
+
+            output.WriteLine(b.GenerateProxyCode(true));
+
+            output.WriteLine(b.GenerateFactoryCode());
+        }
     }
 }

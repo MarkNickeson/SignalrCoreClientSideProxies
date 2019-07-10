@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
-namespace ProxyGen
+namespace CodeGenHelper
 {
     public static class GenericTypeUtils
     {
-        public static string UnrollGenericType(Type type)
+        public static string UnrollGenericTypeToString(Type type)
         {
-            if (!type.IsGenericType) throw new ApplicationException("type is not generic");
+            if (!type.IsGenericType) throw new ApplicationException("Not a generic type");
 
             var sb = new StringBuilder();
-
             PeelGenericLayer(type, sb);
             return sb.ToString();
         }
 
+        // recursively invoked in depth first fashion for total type extract
         static void PeelGenericLayer(Type type, StringBuilder builder)
         {
             // write the generic suffix portion (eg "IFoo<")

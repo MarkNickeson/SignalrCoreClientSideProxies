@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeGenHelper;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -39,7 +40,7 @@ namespace ProxyGen
             // check if factory type is generic interface
             if (FactoryType.IsGenericType)
             {
-                var genericType = GenericTypeUtils.UnrollGenericType(FactoryType);
+                var genericType = GenericTypeUtils.UnrollGenericTypeToString(FactoryType);
                 sb.AppendLine($"public class FactoryImpl : {genericType}");
             }
             else
@@ -159,10 +160,18 @@ namespace ProxyGen
                 }
                 else
                 {
-                    sb.Append($"{m.ReturnType.FullName} ");
+                    if (m.ReturnType.IsGenericType)
+                    {
+                        var genericType = GenericTypeUtils.UnrollGenericTypeToString(m.ReturnType);
+                        sb.Append(genericType);
+                    }
+                    else
+                    {
+                        sb.Append(m.ReturnType.FullName);
+                    }
                 }
 
-                sb.Append($"{m.Name}(");
+                sb.Append($" {m.Name}(");
                 var parameters = m.GetParameters();
                 bool first = true;
                 foreach (var p in parameters)

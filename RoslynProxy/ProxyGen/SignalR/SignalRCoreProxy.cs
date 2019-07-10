@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using CodeGenHelper;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -83,7 +84,22 @@ namespace ProxyGen.SignalR
                 // must await to capture object then cast and return
                 builder.Append($"var temp = await _hub.InvokeCoreAsync(\"");
                 builder.Append(methodInfo.Name);
-                builder.Append($"\",typeof({methodInfo.ReturnType.FullName})");// need the return type
+                // Return type is assumed to be Task<T>, but T can still be generic so unroll it
+                var taskResultType = methodInfo.ReturnType.GetGenericArguments()[0];
+
+                if (taskResultType.IsGenericType)
+                {
+                    // Task<T> where T is also generic
+                    var genericType = GenericTypeUtils.UnrollGenericTypeToString(taskResultType);
+                    builder.Append($"\",typeof({genericType})");
+                }
+                else
+                {
+                    // Task<T> where T is not generic
+                    builder.Append($"\",typeof({taskResultType.FullName})");
+                }
+                
+                // box the method parameters
                 builder.Append(",new object[]{");
                 bool first = true;
                 foreach (var p in methodInfo.GetParameters())
@@ -94,10 +110,19 @@ namespace ProxyGen.SignalR
                 }
                 builder.Append("}");// end of object[]
                 // ignore cancellation token
-                builder.AppendLine(");"); // end of SendCoreAsync
+                builder.AppendLine(");"); // end of Invoke
 
-                // cast temp to return type and package with Task.FromResult
-                builder.AppendLine($"return System.Threading.Tasks.Task.FromResult<{methodInfo.ReturnType.FullName}>(temp);");
+                // cast the return value 
+                if (taskResultType.IsGenericType)
+                {
+                    var returnType = GenericTypeUtils.UnrollGenericTypeToString(taskResultType);
+                    builder.AppendLine($"return ({returnType})temp;");
+                }
+                else
+                {
+                    var returnType = taskResultType.FullName;
+                    builder.AppendLine($"return ({returnType})temp;");
+                }                                
             }
         }
     }
