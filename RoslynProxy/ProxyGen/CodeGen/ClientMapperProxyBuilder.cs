@@ -1,24 +1,23 @@
-﻿using CodeGenHelper;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ProxyGen
+namespace ProxyGen.CodeGen
 {
-    internal class ClientMapperProxyBuilder
+    internal class ClientMapperProxyBuilder<TClient> where TClient : class
     {
         internal const string ClientMapperFactoryClassName = "ClientMapperFactory";
         internal const string ClientMapperClassName = "ClientMapper";
-        internal string Namespace { get; }
+
+        ProxyCodeGenScope sharedScope;
+        internal string Namespace { get => sharedScope.Namespace; }
         internal Type ClientInterfaceType { get; }
 
-        internal ClientMapperProxyBuilder(Type clientInterfaceType)
+        internal ClientMapperProxyBuilder(ProxyCodeGenScope sharedScope)
         {
             // generate a random namespace
-            Namespace = $"_{Guid.NewGuid().ToString("N")}";
-            ClientInterfaceType = clientInterfaceType;
+            this.sharedScope = sharedScope;            
+            ClientInterfaceType = typeof(TClient);
         }
 
         internal string GenerateFactoryCode()
@@ -27,22 +26,12 @@ namespace ProxyGen
             sb.AppendLine($"namespace {Namespace}");
             sb.AppendLine("{");
 
-            sb.AppendLine($"public class {ClientMapperFactoryClassName}");
-            sb.AppendLine("{");
-
-            sb.Append("public ClientMapper Create(Microsoft.AspNetCore.SignalR.Client.HubConnection hub, ");
-
-            if (ClientInterfaceType.IsGenericType)
-            {
-                sb.Append(GenericTypeUtils.UnrollGenericTypeToString(ClientInterfaceType));
-            }
-            else
-            {
-                sb.Append(ClientInterfaceType.FullName);
-            }
-
+            var interfaceType = TypeUtils.TypeToFullyQualifiedString(typeof(IClientMapperProxyFactory<TClient>));
+            sb.AppendLine($"public class {ClientMapperFactoryClassName} : {interfaceType}");
+            sb.AppendLine("{");// start of class body
+            sb.Append($"public {TypeUtils.TypeToFullyQualifiedString(typeof(IDisposable))} Create({TypeUtils.TypeToFullyQualifiedString(typeof(IHubConnectionBridge))} hub, ");
+            sb.Append(TypeUtils.TypeToFullyQualifiedString(ClientInterfaceType));
             sb.Append(" client)");
-
             // emit the body to return instance of ProxyImpl
             sb.AppendLine("{");
             sb.AppendLine($"return new {ClientMapperClassName}(hub, client);");
@@ -72,16 +61,9 @@ namespace ProxyGen
         void EmitFields(StringBuilder sb)
         {
             sb.AppendLine("bool disposedValue = false;");
-            sb.AppendLine("System.Collections.Generic.List<System.IDisposable> Mappings { get; }");
-            sb.AppendLine("Microsoft.AspNetCore.SignalR.Client.HubConnection Hub { get; }");
-            if (ClientInterfaceType.IsGenericType)
-            {
-                sb.AppendLine($"{GenericTypeUtils.UnrollGenericTypeToString(ClientInterfaceType)} Client {{ get; }}");
-            }
-            else
-            {
-                sb.AppendLine($"{ClientInterfaceType.FullName} Client {{ get; }}");
-            }            
+            sb.AppendLine($"{TypeUtils.TypeToFullyQualifiedString(typeof(List<System.IDisposable>))} Mappings {{ get; }}");
+            sb.AppendLine($"{TypeUtils.TypeToFullyQualifiedString(typeof(IHubConnectionBridge))} Hub {{ get; }}");
+            sb.AppendLine($"{TypeUtils.TypeToFullyQualifiedString(ClientInterfaceType)} Client {{ get; }}");            
         }
 
         void EmitMethods(StringBuilder sb)
@@ -101,15 +83,8 @@ namespace ProxyGen
                 {
                     if (!first) sb.AppendLine(",");
                     first = false;
-                    // emit cast
-                    if (p.ParameterType.IsGenericType)
-                    {
-                        sb.Append($"({GenericTypeUtils.UnrollGenericTypeToString(p.ParameterType)})");
-                    }
-                    else
-                    {
-                        sb.Append($"({p.ParameterType.FullName})");
-                    }
+                    // emit cast                    
+                        sb.Append($"({TypeUtils.TypeToFullyQualifiedString(p.ParameterType)})");                    
                     // emit object[]
                     sb.Append($"args[{paramIndex}]");
                     ++paramIndex;
@@ -135,18 +110,10 @@ namespace ProxyGen
 
         void EmitCtor(StringBuilder sb)
         {
-            sb.Append($"public {ClientMapperClassName}(Microsoft.AspNetCore.SignalR.Client.HubConnection hub, ");
-            if (ClientInterfaceType.IsGenericType)
-            {
-                sb.AppendLine($"{GenericTypeUtils.UnrollGenericTypeToString(ClientInterfaceType)} client)");
-            }
-            else
-            {
-                sb.AppendLine($"{ClientInterfaceType.FullName} client)");
-            }
-
+            sb.Append($"public {ClientMapperClassName}({TypeUtils.TypeToFullyQualifiedString(typeof(IHubConnectionBridge))} hub, ");            
+            sb.AppendLine($"{TypeUtils.TypeToFullyQualifiedString(ClientInterfaceType)} client)");            
             sb.AppendLine("{");
-            sb.AppendLine("Mappings = new System.Collections.Generic.List<System.IDisposable>();");
+            sb.AppendLine($"Mappings = new {TypeUtils.TypeToFullyQualifiedString(typeof(List<IDisposable>))}();");
             sb.AppendLine("Hub = hub;");
             sb.AppendLine("Client = client;");
 
@@ -154,8 +121,7 @@ namespace ProxyGen
             var methods = ClientInterfaceType.GetMethods();
             foreach (var m in methods)
             {
-                sb.AppendLine("Mappings.Add(Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(");
-                sb.AppendLine("Hub,");
+                sb.AppendLine("Mappings.Add(Hub.On(");
                 sb.AppendLine($"\"{m.Name}\",");
                 sb.Append("new System.Type[] {");
                 // emit type of each param
@@ -165,14 +131,7 @@ namespace ProxyGen
                 {
                     if (!first) sb.Append(",");
                     first = false;
-                    if (p.ParameterType.IsGenericType)
-                    {
-                        sb.Append($"typeof({GenericTypeUtils.UnrollGenericTypeToString(p.ParameterType)})");
-                    }
-                    else
-                    {
-                        sb.Append($"typeof({p.ParameterType.FullName})");
-                    }
+                    sb.Append($"typeof({TypeUtils.TypeToFullyQualifiedString(p.ParameterType)})");
                 }
                 sb.AppendLine("},"); // end of type array
                 sb.AppendLine($"async (x) => await Map{m.Name}(x)));");

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProxyGenTests.Support
+namespace ProxyGenTests.Fixtures
 {
     public interface ITestClientInterface
     {

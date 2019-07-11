@@ -1,11 +1,24 @@
 ﻿using System;
 using System.Text;
 
-namespace CodeGenHelper
+namespace ProxyGen.CodeGen
 {
-    public static class GenericTypeUtils
+    public static class TypeUtils
     {
-        public static string UnrollGenericTypeToString(Type type)
+        public static string TypeToFullyQualifiedString(Type type)
+        {
+            if (type.IsGenericType)
+            {
+                return UnrollGenericTypeToString(type);
+            }
+            else
+            {
+                return type.FullName;
+            }
+        }
+
+
+        internal static string UnrollGenericTypeToString(Type type)
         {
             if (!type.IsGenericType) throw new ApplicationException("Not a generic type");
 

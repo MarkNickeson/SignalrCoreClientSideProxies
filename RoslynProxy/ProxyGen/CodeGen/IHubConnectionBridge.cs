@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProxyGen.SignalR
+namespace ProxyGen.CodeGen
 {
-    public interface IHubBridge
+    public interface IHubConnectionBridge
     {
         Task<object> InvokeCoreAsync(string methodName, Type returnType, object[] args, CancellationToken cancellationToken = default);
         Task SendCoreAsync(string methodName, object[] args, CancellationToken cancellationToken = default);
+        IDisposable On(string methodName, Type[] parameterTypes, Func<object[], Task> handler);
     }
 }

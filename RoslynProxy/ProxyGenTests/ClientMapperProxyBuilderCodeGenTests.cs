@@ -1,6 +1,6 @@
-﻿using ProxyGen;
-using ProxyGen.SignalR;
-using ProxyGenTests.Support;
+﻿using ProxyGen.CodeGen;
+using ProxyGenTests.Fixtures;
+using ProxyGenTests.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,13 +20,66 @@ namespace ProxyGenTests
         }
 
         [Fact]
-        public void NoParamsReturnTask()
+        public void TestClientInterface()
         {
-            var b = new ClientMapperProxyBuilder(typeof(ITestClientInterface));
+            var scope = new ProxyCodeGenScope();
+            var b = new ClientMapperProxyBuilder<ITestClientInterface>(scope);
 
-            output.WriteLine(b.GenerateFactoryCode());
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestClientInterface)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
 
-            output.WriteLine(b.GenerateProxyCode());
-        }       
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestClientInterface)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+        }
+
+        [Fact]
+        public void GenericTestClientInterface()
+        {
+            var scope = new ProxyCodeGenScope();
+            var b = new ClientMapperProxyBuilder<ITestGenericClientInterface<int>>(scope);
+
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestGenericClientInterface<int>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestGenericClientInterface<int>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+        }
+
+        [Fact]
+        public void GenericTestClientInterface2()
+        {
+            var scope = new ProxyCodeGenScope();
+            var b = new ClientMapperProxyBuilder<ITestGenericClientInterface<Tuple<int>>>(scope);
+
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestGenericClientInterface<Tuple<int>>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(ITestGenericClientInterface<Tuple<int>>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+        }
     }
 }

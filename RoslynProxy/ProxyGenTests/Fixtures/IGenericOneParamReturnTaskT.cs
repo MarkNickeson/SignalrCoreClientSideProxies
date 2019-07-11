@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProxyGenTests
+namespace ProxyGenTests.Fixtures
 {
-    public interface IOneParamReturnTaskT
+    public interface IGenericOneParamReturnTask<T>
     {
-        Task<int> Foo(int test);
+        Task<T> Foo(T test);
     }
 }

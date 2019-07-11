@@ -1,5 +1,8 @@
 ﻿using ProxyGen;
+using ProxyGen.CodeGen;
 using ProxyGen.SignalR;
+using ProxyGenTests.Fixtures;
+using ProxyGenTests.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,45 +24,126 @@ namespace ProxyGenTests
         [Fact]
         public void NoParamsReturnTask()
         {
-            var b = new ServerProxyBuilder(typeof(IFactory<INoParamReturnTask>), typeof(INoParamReturnTask),
-                SignalRCoreProxy.ServerProxyCodeGen);
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<INoParamReturnTask>(scope);
 
-            output.WriteLine(b.GenerateProxyCode(true));
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(INoParamReturnTask)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
 
-            output.WriteLine(b.GenerateFactoryCode());
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(INoParamReturnTask)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
         }
 
         [Fact]
         public void NoParamsReturnTaskT()
         {
-            var b = new ServerProxyBuilder(typeof(IFactory<INoParamReturnTaskT>), typeof(INoParamReturnTaskT),
-                SignalRCoreProxy.ServerProxyCodeGen);
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<INoParamReturnTaskT>(scope);
 
-            output.WriteLine(b.GenerateProxyCode(true));
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(INoParamReturnTaskT)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
 
-            output.WriteLine(b.GenerateFactoryCode());
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(INoParamReturnTaskT)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
         }
 
         [Fact]
         public void OneParamReturnTask()
         {
-            var b = new ServerProxyBuilder(typeof(IFactory<IOneParamReturnTask>), typeof(IOneParamReturnTask),
-                SignalRCoreProxy.ServerProxyCodeGen);
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<IOneParamReturnTask>(scope);
 
-            output.WriteLine(b.GenerateProxyCode(true));
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(IOneParamReturnTask)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
 
-            output.WriteLine(b.GenerateFactoryCode());
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(IOneParamReturnTask)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
         }
 
         [Fact]
         public void OneParamReturnTaskT()
         {
-            var b = new ServerProxyBuilder(typeof(IFactory<IOneParamReturnTaskT>), typeof(IOneParamReturnTaskT),
-                SignalRCoreProxy.ServerProxyCodeGen);
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<IOneParamReturnTaskT>(scope);
 
-            output.WriteLine(b.GenerateProxyCode(true));
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(IOneParamReturnTaskT)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
 
-            output.WriteLine(b.GenerateFactoryCode());
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(IOneParamReturnTaskT)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+        }
+
+        [Fact]
+        public void GenericNoParamsReturnTaskT()
+        {
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<IGenericNoParamReturnTask<int>>(scope);
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(IGenericNoParamReturnTask<int>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(IGenericNoParamReturnTask<int>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+        }
+
+        [Fact]
+        public void GenericOneParamReturnTaskT()
+        {
+            var scope = new ProxyCodeGenScope();
+            var b = new ServerProxyBuilder<IGenericOneParamReturnTask<Tuple<int>>>(scope);
+
+            var s = b.GenerateProxyCode();
+            if (!SyntaxCheck.Check(s, typeof(IGenericOneParamReturnTask<Tuple<int>>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
+
+            s = b.GenerateFactoryCode();
+            if (!SyntaxCheck.Check(s, typeof(IGenericOneParamReturnTask<Tuple<int>>)))
+            {
+                output.WriteLine(s);
+                Assert.True(false);
+            }
         }
     }
 }

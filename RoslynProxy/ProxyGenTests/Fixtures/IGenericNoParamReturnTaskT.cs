@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProxyGenTests
+namespace ProxyGenTests.Fixtures
 {
-    public interface IGoodAsync
+    public interface IGenericNoParamReturnTask<T>
     {
-        Task Foo1();
-        Task<string> Foo2();
+        Task<T> Foo();
     }
 }

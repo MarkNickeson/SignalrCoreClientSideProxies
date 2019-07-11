@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using ProxyGen.CodeGen;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ProxyGen.SignalR
 {
-    public class DefaultHubConnectionBridge : IHubBridge
+    public class DefaultHubConnectionBridge : IHubConnectionBridge
     {
         HubConnection hubConnection;
 
@@ -24,6 +23,11 @@ namespace ProxyGen.SignalR
         public async Task SendCoreAsync(string methodName, object[] args, CancellationToken cancellationToken = default)
         {
             await hubConnection.SendCoreAsync(methodName, args, cancellationToken);
+        }
+
+        public IDisposable On(string methodName, Type[] parameterTypes, Func<object[], Task> handler)
+        {
+            return hubConnection.On(methodName, parameterTypes, handler);
         }
     }
 }

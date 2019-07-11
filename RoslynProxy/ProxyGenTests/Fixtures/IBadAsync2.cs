@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProxyGenTests
+namespace ProxyGenTests.Fixtures
 {
-    public interface IBadAsync3
+    public interface IBadAsync2
     {
-        int Foo { get; }
+        int Foo();
     }
 }
