@@ -21,7 +21,7 @@ namespace ProxyGen
 
             Validate(factoryType, proxyType);
 
-            var builder = new ProxyBuilder(factoryType, proxyType, emitCSharpBody);
+            var builder = new ServerProxyBuilder(factoryType, proxyType, emitCSharpBody);
 
             var proxySyntaxTree = GenerateProxySyntaxTree(builder);
             var factorySyntaxTree = GenerateFactorySyntaxTree(builder);
@@ -48,18 +48,18 @@ namespace ProxyGen
 
             // reflect over asm to find TFactory, create and return instance
 
-            var ft = asm.GetType($"{builder.Namespace}.FactoryImpl");
+            var ft = asm.GetType($"{builder.Namespace}.{ServerProxyBuilder.FactoryClassName}");
 
             return Activator.CreateInstance(ft) as TFactory;
         }
 
-        static SyntaxTree GenerateProxySyntaxTree(ProxyBuilder builder)
+        static SyntaxTree GenerateProxySyntaxTree(ServerProxyBuilder builder)
         {
             var code = builder.GenerateProxyCode(true);
             return CSharpSyntaxTree.ParseText(code);
         }
 
-        static SyntaxTree GenerateFactorySyntaxTree(ProxyBuilder builder)
+        static SyntaxTree GenerateFactorySyntaxTree(ServerProxyBuilder builder)
         {
             var code =  builder.GenerateFactoryCode();
             return CSharpSyntaxTree.ParseText(code);

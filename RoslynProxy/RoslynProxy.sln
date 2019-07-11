@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProxyGen", "ProxyGen\ProxyGen.csproj", "{A6DDAB5B-4177-4116-A81F-E1E75D58063A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyGenTests", "ProxyGenTests\ProxyGenTests.csproj", "{3F4121B5-80B4-4A89-AAB4-83D09451BB39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProxyGenTests", "ProxyGenTests\ProxyGenTests.csproj", "{3F4121B5-80B4-4A89-AAB4-83D09451BB39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

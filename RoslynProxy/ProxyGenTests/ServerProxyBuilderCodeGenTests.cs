@@ -9,11 +9,11 @@ using Xunit.Abstractions;
 
 namespace ProxyGenTests
 {
-    public class CodeGenTests
+    public class ServerProxyBuilderCodeGenTests
     {
         private readonly ITestOutputHelper output;
 
-        public CodeGenTests(ITestOutputHelper output)
+        public ServerProxyBuilderCodeGenTests(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -21,7 +21,7 @@ namespace ProxyGenTests
         [Fact]
         public void NoParamsReturnTask()
         {
-            var b = new ProxyBuilder(typeof(IFactory<INoParamReturnTask>), typeof(INoParamReturnTask),
+            var b = new ServerProxyBuilder(typeof(IFactory<INoParamReturnTask>), typeof(INoParamReturnTask),
                 SignalRCoreProxy.ServerProxyCodeGen);
 
             output.WriteLine(b.GenerateProxyCode(true));
@@ -32,7 +32,7 @@ namespace ProxyGenTests
         [Fact]
         public void NoParamsReturnTaskT()
         {
-            var b = new ProxyBuilder(typeof(IFactory<INoParamReturnTaskT>), typeof(INoParamReturnTaskT),
+            var b = new ServerProxyBuilder(typeof(IFactory<INoParamReturnTaskT>), typeof(INoParamReturnTaskT),
                 SignalRCoreProxy.ServerProxyCodeGen);
 
             output.WriteLine(b.GenerateProxyCode(true));
@@ -43,7 +43,7 @@ namespace ProxyGenTests
         [Fact]
         public void OneParamReturnTask()
         {
-            var b = new ProxyBuilder(typeof(IFactory<IOneParamReturnTask>), typeof(IOneParamReturnTask),
+            var b = new ServerProxyBuilder(typeof(IFactory<IOneParamReturnTask>), typeof(IOneParamReturnTask),
                 SignalRCoreProxy.ServerProxyCodeGen);
 
             output.WriteLine(b.GenerateProxyCode(true));
@@ -54,7 +54,7 @@ namespace ProxyGenTests
         [Fact]
         public void OneParamReturnTaskT()
         {
-            var b = new ProxyBuilder(typeof(IFactory<IOneParamReturnTaskT>), typeof(IOneParamReturnTaskT),
+            var b = new ServerProxyBuilder(typeof(IFactory<IOneParamReturnTaskT>), typeof(IOneParamReturnTaskT),
                 SignalRCoreProxy.ServerProxyCodeGen);
 
             output.WriteLine(b.GenerateProxyCode(true));

@@ -7,20 +7,22 @@ using System.Threading.Tasks;
 
 namespace ProxyGen
 {
-    internal class ProxyBuilder
+    internal class ServerProxyBuilder
     {
+        internal const string FactoryClassName = "ServerProxyFactoryImpl";
+        internal const string ProxyClassName = "ProxyImpl";
         internal string Namespace { get; }
         internal Type FactoryType { get; }
         internal Type ProxyType { get; }
 
         Action<StringBuilder, MethodInfo> emitCSharpBody;
 
-        internal ProxyBuilder(Type factoryType, Type proxyType) 
+        internal ServerProxyBuilder(Type factoryType, Type proxyType) 
             : this(factoryType, proxyType, DefaultCSharpBodyEmitters.Empty)
         {
         }
 
-        internal ProxyBuilder(
+        internal ServerProxyBuilder(
             Type factoryType, 
             Type proxyType, 
             Action<StringBuilder, MethodInfo> emitCSharpBody)
@@ -41,11 +43,11 @@ namespace ProxyGen
             if (FactoryType.IsGenericType)
             {
                 var genericType = GenericTypeUtils.UnrollGenericTypeToString(FactoryType);
-                sb.AppendLine($"public class FactoryImpl : {genericType}");
+                sb.AppendLine($"public class {FactoryClassName} : {genericType}");
             }
             else
             {
-                sb.AppendLine($"public class FactoryImpl : {FactoryType.FullName}");
+                sb.AppendLine($"public class {FactoryClassName} : {FactoryType.FullName}");
             }
             sb.AppendLine("{");
 
@@ -69,7 +71,7 @@ namespace ProxyGen
 
             // emit the body to return instance of ProxyImpl
             sb.AppendLine("{");
-            sb.Append("return new ProxyImpl(");
+            sb.Append($"return new {ProxyClassName}(");
             first = true;
             foreach (var p in parameters)
             {
@@ -89,7 +91,7 @@ namespace ProxyGen
             var sb = new StringBuilder();
             sb.AppendLine($"namespace {Namespace}");
             sb.AppendLine("{");
-            sb.AppendLine($"public class ProxyImpl : {ProxyType.FullName}");
+            sb.AppendLine($"public class {ProxyClassName} : {ProxyType.FullName}");
             sb.AppendLine("{");
             // emit ctor that corresponds to Create method on factory
             EmitFields(sb);
@@ -117,7 +119,7 @@ namespace ProxyGen
         {
             var createMethod = FactoryType.GetMethod("Create");
 
-            sb.Append("public ProxyImpl(");
+            sb.Append($"public {ProxyClassName}(");
 
             // get args
             var parameters = createMethod.GetParameters();

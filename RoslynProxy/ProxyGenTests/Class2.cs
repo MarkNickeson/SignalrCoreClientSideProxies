@@ -13,13 +13,21 @@ namespace Test
         Task<int> Foo6(int arg);
     }
 
-    public class Unwrapper : IDisposable
+    public class MapperFactory
     {
-        IClient client;
+        public Mapper Create(HubConnection hub, IClient client)
+        {
+            return new Mapper(hub, client);
+        }
+    }
+
+    public class Mapper : IDisposable
+    {
         HubConnection hub;
+        IClient client;        
         List<IDisposable> handlers = new List<IDisposable>();
 
-        public Unwrapper(IClient client, HubConnection hub)
+        public Mapper(HubConnection hub, IClient client)
         {
             this.client = client;
             this.hub = hub;
@@ -27,35 +35,38 @@ namespace Test
             // register On handlers for client methods
             // use the non extension base impl
             // public IDisposable On(string methodName, Type[] parameterTypes, Func<object[], object, Task> handler, object state);
-            object state = null;
-            handlers.Add(hub.On("Foo2", new Type[] { }, Foo2Handler, state));
-            handlers.Add(hub.On("Foo3", new Type[] { }, Foo3Handler, state));
-            handlers.Add(hub.On("Foo5", new Type[] { typeof(int) }, Foo5Handler, state));
-            handlers.Add(hub.On("Foo6", new Type[] { typeof(int) }, Foo6Handler, state));
+
+            handlers.Add(HubConnectionExtensions.On(
+                hub, 
+                "Foo2", 
+                new Type[] {
+                }, 
+                async (x) => await Foo2Handler(x)
+                ));
+
+            handlers.Add(HubConnectionExtensions.On(hub, "Foo3", new Type[] { }, async (x) => await Foo3Handler(x)));
+            handlers.Add(HubConnectionExtensions.On(hub, "Foo5", new Type[] { typeof(int) }, async (x) => await Foo5Handler(x)));
+            handlers.Add(HubConnectionExtensions.On(hub, "Foo6", new Type[] { typeof(int) }, async (x) => await Foo6Handler(x)));
         }
 
-        async Task Foo2Handler(object[] args, object state)
+        async Task Foo2Handler(object[] args)
         {
             await client.Foo2();
-            return;
         }
 
-        async Task Foo3Handler(object[] args, object state)
+        async Task Foo3Handler(object[] args)
         {
-            var rval = await client.Foo3();
-            // assume state has to be return value handler, maybe exception 
+            await client.Foo3();
         }
 
-        async Task Foo5Handler(object[] args, object state)
+        async Task Foo5Handler(object[] args)
         {
             await client.Foo5((int)args[0]);
-            return;
         }
 
-        async Task Foo6Handler(object[] args, object state)
+        async Task Foo6Handler(object[] args)
         {
-            var rval = await client.Foo6((int)args[0]);
-            // state must be return value handler, maybe exception 
+            await client.Foo6((int)args[0]); 
         }
 
         bool disposedValue = false;
