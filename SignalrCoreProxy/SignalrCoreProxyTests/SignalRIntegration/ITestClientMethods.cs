@@ -12,6 +12,6 @@ namespace SignalrCoreProxyTests.SignalRIntegration
     {
         Task Foo1();
         Task Foo2(int arg1);
-        Task Foo3(Tuple<int> arg1);
+        Task Foo3(Custom<int> arg1);
     }
 }

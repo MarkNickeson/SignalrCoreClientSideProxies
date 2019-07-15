@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SignalrCoreProxyTests.SignalRIntegration
 {
-    public class TestHub : Hub<ITestClientMethods>, ITestServerMethods
+    public class TestHubWithServerDelegate : Hub<ITestClientMethods>, ITestServerMethods
     {
         ITestServerMethods serverDelegate;
 
-        public TestHub(ITestServerMethods serverDelegate)
+        public TestHubWithServerDelegate(ITestServerMethods serverDelegate)
         {
             if (serverDelegate == null) throw new ArgumentNullException("serverDelegate");
             this.serverDelegate = serverDelegate;
@@ -26,7 +26,7 @@ namespace SignalrCoreProxyTests.SignalRIntegration
             await serverDelegate.Bar2(arg1);
         }
 
-        public async Task Bar3(Tuple<int> arg1)
+        public async Task Bar3(Custom<int> arg1)
         {
             await serverDelegate.Bar3(arg1);
         }
@@ -39,6 +39,11 @@ namespace SignalrCoreProxyTests.SignalRIntegration
         public async Task<int> Bar5(int arg1)
         {
             return await serverDelegate.Bar5(arg1);
-        }      
+        }
+
+        public async Task<Custom<int>> Bar6(int arg1)
+        {
+            return await serverDelegate.Bar6(arg1);
+        }
     }
 }

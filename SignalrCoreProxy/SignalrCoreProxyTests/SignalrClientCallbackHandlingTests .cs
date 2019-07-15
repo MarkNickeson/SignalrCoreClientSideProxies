@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using SignalrCoreClientHelper;
 using SignalrCoreProxyTests.SignalRIntegration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,24 +17,20 @@ using Xunit.Abstractions;
 
 namespace SignalrCoreProxyTests
 {
-    public class SignalrClientTests
+    public class SignalrClientCallbackHandlingTests
     {
         private readonly ITestOutputHelper output;
 
-        public SignalrClientTests(ITestOutputHelper output)
+        public SignalrClientCallbackHandlingTests(ITestOutputHelper output)
         {
             this.output = output;
         }
 
-        // what does client test entail?
-        // - host running server api
-        // - server mechanism to poke client
-        // - server mechanism to ack client initiated callbacks
-
         [Fact]
-        public async Task Foo()
+        public async Task GoodTest()
         {
             var serverCheck = new TestServerMethodsFailOnCall();
+            serverCheck.ResetToFailAll(); // for client test make sure all server methods fail
 
             var app = Host.CreateDefaultBuilder()
                 .ConfigureServices((sc) =>
@@ -47,7 +45,7 @@ namespace SignalrCoreProxyTests
                         app.UseRouting();
                         app.UseEndpoints(endpoints =>
                         {
-                            endpoints.MapHub<TestHub>("TestHub");
+                            endpoints.MapHub<TestHubWithServerDelegate>("TestHub");
                         });
                     });
                     wh.UseTestServer();
@@ -57,6 +55,9 @@ namespace SignalrCoreProxyTests
             app.Start();
 
             var server = app.GetTestServer();
+
+            // resolve server-side hub context
+            var serverHubContext = app.Services.GetRequiredService<IHubContext<TestHubWithServerDelegate, ITestClientMethods>>();
 
             var hub = new HubConnectionBuilder()
                 .WithUrl(
@@ -68,27 +69,36 @@ namespace SignalrCoreProxyTests
 
             var proxyFactory = ClientSideProxies.Generate<ITestServerMethods, ITestClientMethods>();
 
-            var serverProxy = proxyFactory.CreateServerProxy(hub);
+            // create client implementation
+            var clientImpl = new TestClientMethodsFailOnCall();
 
-            serverCheck.ResetToFailAll();
-            serverCheck.FailOnBar1 = false;
-            await serverProxy.Bar1();
+            // create client mapper proxy
+            proxyFactory.CreateClientMapperProxy(hub, clientImpl);
 
-            serverCheck.ResetToFailAll();
-            serverCheck.FailOnBar2 = false;
-            await serverProxy.Bar2(1);
+            int successCount = 0;
 
-            serverCheck.ResetToFailAll();
-            serverCheck.FailOnBar3 = false;
-            await serverProxy.Bar3(Tuple.Create(2));
+            clientImpl.ResetToFailAll();
+            clientImpl.Signal.Reset();
+            clientImpl.FailOnFoo1 = false;
+            await serverHubContext.Clients.All.Foo1();
+            clientImpl.Signal.WaitOne();
+            successCount++;
+           
+            clientImpl.ResetToFailAll();
+            clientImpl.Signal.Reset();
+            clientImpl.FailOnFoo2 = false;   
+            await serverHubContext.Clients.All.Foo2(97);
+            clientImpl.Signal.WaitOne();
+            successCount++;   
 
-            serverCheck.ResetToFailAll();
-            serverCheck.FailOnBar4 = false;
-            await serverProxy.Bar4();
-
-            serverCheck.ResetToFailAll();
-            serverCheck.FailOnBar5 = false;
-            await serverProxy.Bar5(3);
+            clientImpl.ResetToFailAll();
+            clientImpl.Signal.Reset();
+            clientImpl.FailOnFoo3 = false;
+            await serverHubContext.Clients.All.Foo3(new Custom<int>() { Value = 96 });
+            clientImpl.Signal.WaitOne();
+            successCount++;
+            
+            Assert.Equal(3, successCount);
         }
     }
 }

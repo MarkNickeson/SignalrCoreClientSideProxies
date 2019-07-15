@@ -33,7 +33,7 @@ namespace SignalrCoreClientHelper
                 cg2.GenerateProxyCode(),
             };
 
-            Trace.WriteLine(code[3]);
+            Trace.WriteLine(code[1]);
 
             // compile code to assembly
             var asm = ProxyCompiler.Compile(code, clientInterfaceType, serverInterfaceType);

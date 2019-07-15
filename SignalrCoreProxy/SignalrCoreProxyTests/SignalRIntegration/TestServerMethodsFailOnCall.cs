@@ -12,6 +12,7 @@ namespace SignalrCoreProxyTests.SignalRIntegration
         public bool FailOnBar3 { get; set; }
         public bool FailOnBar4 { get; set; }
         public bool FailOnBar5 { get; set; }
+        public bool FailOnBar6 { get; set; }
 
         public void ResetToFailAll()
         {
@@ -20,6 +21,7 @@ namespace SignalrCoreProxyTests.SignalRIntegration
             FailOnBar3 = true;
             FailOnBar4 = true;
             FailOnBar5 = true;
+            FailOnBar6 = true;
         }
 
         public Task Bar1()
@@ -34,7 +36,7 @@ namespace SignalrCoreProxyTests.SignalRIntegration
             return Task.CompletedTask;
         }
 
-        public Task Bar3(Tuple<int> arg1)
+        public Task Bar3(Custom<int> arg1)
         {
             if (FailOnBar3) throw new ApplicationException("Bar3");
             return Task.CompletedTask;
@@ -50,6 +52,12 @@ namespace SignalrCoreProxyTests.SignalRIntegration
         {
             if (FailOnBar5) throw new ApplicationException("Bar5");
             return Task.FromResult<int>(998);
-        }      
+        }
+
+        public Task<Custom<int>> Bar6(int arg1)
+        {
+            if (FailOnBar6) throw new ApplicationException("Bar6");
+            return Task.FromResult<Custom<int>>(new Custom<int>() { Value = arg1});
+        }
     }
 }
