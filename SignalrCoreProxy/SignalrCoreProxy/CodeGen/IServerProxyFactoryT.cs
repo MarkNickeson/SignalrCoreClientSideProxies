@@ -1,4 +1,4 @@
-﻿namespace SignalrCoreProxy.CodeGen
+﻿namespace SignalrCoreClientHelper.CodeGen
 {
     public interface IServerProxyFactory<T> where T : class
     {

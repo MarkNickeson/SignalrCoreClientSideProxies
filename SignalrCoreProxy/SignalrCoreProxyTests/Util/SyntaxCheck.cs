@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using SignalrCoreProxy.CodeGen;
+using SignalrCoreClientHelper.CodeGen;
 using System;
 
 namespace SignalrCoreProxyTests.Util

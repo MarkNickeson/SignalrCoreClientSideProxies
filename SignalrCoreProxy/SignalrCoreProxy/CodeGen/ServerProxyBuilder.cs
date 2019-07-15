@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace SignalrCoreProxy.CodeGen
+namespace SignalrCoreClientHelper.CodeGen
 {
     internal class ServerProxyBuilder<TServer> where TServer : class
     {
@@ -129,7 +129,8 @@ namespace SignalrCoreProxy.CodeGen
                 builder.Append($"var temp = await Hub.InvokeCoreAsync(\"");
                 builder.Append(methodInfo.Name);
                 // Return type is assumed to be Task<T>, but T can still be generic so unroll it
-                builder.Append($"\",typeof({TypeUtils.TypeToFullyQualifiedString(methodInfo.ReturnType)})");
+                var taskT = methodInfo.ReturnType.GetGenericArguments()[0];
+                builder.Append($"\",typeof({TypeUtils.TypeToFullyQualifiedString(taskT)})");
 
                 // box the method parameters
                 builder.Append(",new object[]{");

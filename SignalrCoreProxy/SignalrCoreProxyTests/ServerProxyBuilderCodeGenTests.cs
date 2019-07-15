@@ -1,4 +1,4 @@
-﻿using SignalrCoreProxy.CodeGen;
+﻿using SignalrCoreClientHelper.CodeGen;
 using SignalrCoreProxyTests.Fixtures;
 using SignalrCoreProxyTests.Util;
 using System;

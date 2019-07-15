@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SignalrCoreProxy.CodeGen
+namespace SignalrCoreClientHelper.CodeGen
 {
     internal class ClientMapperProxyBuilder<TClient> where TClient : class
     {

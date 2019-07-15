@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxy.CodeGen
+namespace SignalrCoreClientHelper.CodeGen
 {
     public interface IHubConnectionBridge
     {

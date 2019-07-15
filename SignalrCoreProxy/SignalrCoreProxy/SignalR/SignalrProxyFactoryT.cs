@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using SignalrCoreProxy.CodeGen;
+using SignalrCoreClientHelper.CodeGen;
 using System;
 
-namespace SignalrCoreProxy.SignalR
+namespace SignalrCoreClientHelper.SignalR
 {
     public class SignalrProxyFactory<TServer, TClient>
         where TClient : class

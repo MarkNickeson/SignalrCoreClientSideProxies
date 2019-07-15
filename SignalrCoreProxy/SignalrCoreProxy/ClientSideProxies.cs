@@ -1,11 +1,12 @@
-﻿using SignalrCoreProxy.CodeGen;
-using SignalrCoreProxy.SignalR;
+﻿using SignalrCoreClientHelper.CodeGen;
+using SignalrCoreClientHelper.SignalR;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxy
+namespace SignalrCoreClientHelper
 {
-    public class SignalrCoreProxyGen
+    public class ClientSideProxies
     {
         public static SignalrProxyFactory<TServer, TClient> Generate<TServer, TClient>() 
             where TServer : class
@@ -32,8 +33,17 @@ namespace SignalrCoreProxy
                 cg2.GenerateProxyCode(),
             };
 
+            Trace.WriteLine(code[3]);
+
             // compile code to assembly
             var asm = ProxyCompiler.Compile(code, clientInterfaceType, serverInterfaceType);
+
+            var types = asm.GetTypes();
+            Trace.WriteLine($"Types found: {types.Length}");
+            foreach(var t in types)
+            {
+                Trace.WriteLine($"{t.FullName}");
+            }
 
             // create client and server factory
             var ct = asm.GetType($"{scope.Namespace}.{ClientMapperProxyBuilder<TClient>.ClientMapperFactoryClassName}");
