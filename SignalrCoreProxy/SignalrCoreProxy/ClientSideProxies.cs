@@ -1,14 +1,14 @@
-﻿using SignalrCoreClientHelper.CodeGen;
-using SignalrCoreClientHelper.SignalR;
+﻿using ClientSideProxyHelper.CodeGen;
+using ClientSideProxyHelper.SignalR;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SignalrCoreClientHelper
+namespace ClientSideProxyHelper
 {
     public class ClientSideProxies
     {
-        public static SignalrProxyFactory<TServer, TClient> Generate<TServer, TClient>() 
+        public static ClientSideProxyFactory<TServer, TClient> GenerateFor<TServer, TClient>() 
             where TServer : class
             where TClient : class
         {
@@ -52,7 +52,7 @@ namespace SignalrCoreClientHelper
             var clientFactory = Activator.CreateInstance(ct) as IClientMapperProxyFactory<TClient>;
             var serverFactory = Activator.CreateInstance(st) as IServerProxyFactory<TServer>;
 
-            return new SignalrProxyFactory<TServer, TClient>(serverFactory, clientFactory);
+            return new ClientSideProxyFactory<TServer, TClient>(serverFactory, clientFactory);
         }
 
         static void ValidateTServer(Type serverType)

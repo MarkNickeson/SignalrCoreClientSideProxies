@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SignalrCoreClientHelper.CodeGen
+namespace ClientSideProxyHelper.CodeGen
 {
     internal class ProxyCodeGenScope
     {

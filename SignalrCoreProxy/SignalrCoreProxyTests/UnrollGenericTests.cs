@@ -1,4 +1,4 @@
-﻿using SignalrCoreClientHelper.CodeGen;
+﻿using ClientSideProxyHelper.CodeGen;
 using System;
 using System.Collections.Generic;
 using Xunit;

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using SignalrCoreClientHelper.CodeGen;
+using ClientSideProxyHelper.CodeGen;
 using System;
 
-namespace SignalrCoreClientHelper.SignalR
+namespace ClientSideProxyHelper.SignalR
 {
-    public class SignalrProxyFactory<TServer, TClient>
+    public class ClientSideProxyFactory<TServer, TClient>
         where TClient : class
         where TServer : class
     {
         IClientMapperProxyFactory<TClient> clientMapperProxyFactory;
         IServerProxyFactory<TServer> serverProxyFactory;
 
-        internal SignalrProxyFactory(IServerProxyFactory<TServer> serverProxyFactory, IClientMapperProxyFactory<TClient> clientMapperProxyFactory)
+        internal ClientSideProxyFactory(IServerProxyFactory<TServer> serverProxyFactory, IClientMapperProxyFactory<TClient> clientMapperProxyFactory)
         {
             this.clientMapperProxyFactory = clientMapperProxyFactory;
             this.serverProxyFactory = serverProxyFactory;

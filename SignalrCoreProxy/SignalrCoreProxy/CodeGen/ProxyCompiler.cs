@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace SignalrCoreClientHelper.CodeGen
+namespace ClientSideProxyHelper.CodeGen
 {
     internal static class ProxyCompiler
     {

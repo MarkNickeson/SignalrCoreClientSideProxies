@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SignalrCoreClientHelper.CodeGen
+namespace ClientSideProxyHelper.CodeGen
 {
     public static class TypeUtils
     {

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace SignalrCoreClientHelper.CodeGen
+namespace ClientSideProxyHelper.CodeGen
 {
     internal class ServerProxyBuilder<TServer> where TServer : class
     {

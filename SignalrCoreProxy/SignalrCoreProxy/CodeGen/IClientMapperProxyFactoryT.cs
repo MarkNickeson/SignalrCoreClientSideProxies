@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SignalrCoreClientHelper.CodeGen
+namespace ClientSideProxyHelper.CodeGen
 {
     public interface IClientMapperProxyFactory<T> where T: class
     {

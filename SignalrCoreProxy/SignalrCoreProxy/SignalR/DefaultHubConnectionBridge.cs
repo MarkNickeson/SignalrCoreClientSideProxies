@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using SignalrCoreClientHelper.CodeGen;
+using ClientSideProxyHelper.CodeGen;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalrCoreClientHelper.SignalR
+namespace ClientSideProxyHelper.SignalR
 {
     public class DefaultHubConnectionBridge : IHubConnectionBridge
     {

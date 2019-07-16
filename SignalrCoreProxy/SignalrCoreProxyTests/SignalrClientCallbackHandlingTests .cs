@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SignalrCoreClientHelper;
+using ClientSideProxyHelper;
 using SignalrCoreProxyTests.SignalRIntegration;
 using System;
 using System.Collections.Generic;
@@ -67,7 +67,7 @@ namespace SignalrCoreProxyTests
 
             await hub.StartAsync();
 
-            var proxyFactory = ClientSideProxies.Generate<ITestServerMethods, ITestClientMethods>();
+            var proxyFactory = ClientSideProxies.GenerateFor<ITestServerMethods, ITestClientMethods>();
 
             // create client implementation
             var clientImpl = new TestClientMethodsFailOnCall();

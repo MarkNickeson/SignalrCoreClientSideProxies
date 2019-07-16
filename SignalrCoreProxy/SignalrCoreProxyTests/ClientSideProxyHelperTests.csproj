@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SignalrCoreProxy\SignalrCoreClientHelper.csproj" />
+    <ProjectReference Include="..\SignalrCoreProxy\ClientSideProxyHelper.csproj" />
   </ItemGroup>
 
 </Project>

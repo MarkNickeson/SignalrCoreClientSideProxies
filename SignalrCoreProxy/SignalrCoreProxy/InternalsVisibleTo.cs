@@ -1,1 +1,1 @@
-﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("SignalrCoreProxyTests")]
+﻿[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("ClientSideProxyHelperTests")]
