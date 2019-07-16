@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyName>SignalrCoreClientHelper</AssemblyName>
+    <AssemblyName>ClientSideProxyHelper</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

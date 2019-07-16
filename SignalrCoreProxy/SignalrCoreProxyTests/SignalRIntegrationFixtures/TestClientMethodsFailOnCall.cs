@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxyTests.SignalRIntegration
+namespace ClientSideProxyHelperTests.SignalRIntegrationFixtures
 {
     public class TestClientMethodsFailOnCall : ITestClientMethods
     {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ClientSideProxyHelper;
-using SignalrCoreProxyTests.SignalRIntegration;
+using ClientSideProxyHelperTests.SignalRIntegrationFixtures;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SignalrCoreProxyTests
+namespace ClientSideProxyHelperTests
 {
     public class SignalrClientToServerTests
     {

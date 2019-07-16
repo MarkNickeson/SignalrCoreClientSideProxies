@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using ClientSideProxyHelper.CodeGen;
 using System;
 
-namespace SignalrCoreProxyTests.Util
+namespace ClientSideProxyHelperTests.Util
 {
     public static class SyntaxCheck
     {

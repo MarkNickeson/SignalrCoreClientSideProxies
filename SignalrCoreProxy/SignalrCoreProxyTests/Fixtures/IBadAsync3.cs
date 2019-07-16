@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SignalrCoreProxyTests.Fixtures
+namespace ClientSideProxyHelperTests.Fixtures
 {
     public interface IBadAsync3
     {

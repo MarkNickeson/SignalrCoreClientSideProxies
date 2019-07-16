@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxyTests.SignalRIntegration
+namespace ClientSideProxyHelperTests.SignalRIntegrationFixtures
 {
     public class TestServerMethodsFailOnCall : ITestServerMethods
     {

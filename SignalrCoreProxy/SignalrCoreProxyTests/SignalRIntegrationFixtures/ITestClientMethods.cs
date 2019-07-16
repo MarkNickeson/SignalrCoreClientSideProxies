@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxyTests.SignalRIntegration
+namespace ClientSideProxyHelperTests.SignalRIntegrationFixtures
 {
     // invokable on client
     // - use for creating strongly typed hub on the server 

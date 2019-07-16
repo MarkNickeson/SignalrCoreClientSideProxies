@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace SignalrCoreProxyTests
+namespace ClientSideProxyHelperTests
 {
     public class UnrollGenericTests
     {

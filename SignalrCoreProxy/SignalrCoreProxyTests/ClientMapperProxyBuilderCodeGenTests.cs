@@ -1,6 +1,6 @@
 ﻿using ClientSideProxyHelper.CodeGen;
-using SignalrCoreProxyTests.Fixtures;
-using SignalrCoreProxyTests.Util;
+using ClientSideProxyHelperTests.Fixtures;
+using ClientSideProxyHelperTests.Util;
 using System;
 using Xunit;
 using Xunit.Abstractions;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SignalrCoreProxyTests.SignalRIntegration
+namespace ClientSideProxyHelperTests.SignalRIntegrationFixtures
 {
     // implement with signalr hub
     // - given a HubConnection, signalr client creates a proxy to the server
