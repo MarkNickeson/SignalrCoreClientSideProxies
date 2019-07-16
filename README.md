@@ -1,17 +1,21 @@
-# Stongly-Typed SignalR Core Client-side Proxies
+# Stongly-Typed Client-side Proxies for SignalR Core
+## Overview
 
-[SignalR Core](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) is awesome! But currently strongly-typed contracts are not supported for .NET clients. This project fills this gap by providing the following capabilities:
-- Strongly-typed proxy for Client -> Server calls
-- Strongly-typed proxy for Server -> Client callbacks
-- Automatic runtime proxy generation based on Roslyn (Microsoft.CodeAnalysis.*)
+[SignalR Core](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) is awesome! A current limitation, however, is that .NET clients are not strongly-typed.
+
+This project adds the following strongly-typed client capabilities:
+- Automatic, runtime generation of:
+    - strongly-typed proxies for Client -> Server calls
+    - strongly-typed mapper proxies for Server -> Client callback mapping
+- Runtime proxy factory generation based on Roslyn (Microsoft.CodeAnalysis.*)
 
 ## Basic Usage
 
-### Generate proxy factory given server and client contracts
+### Generating a proxy factory given server and client contracts
 ```csharp
 var proxyFactory = ClientSideProxies.GenerateFor<IServerContract, IClientContract>();
 ```
-### Create and start a hub connection
+### Creating and starting a hub connection
 ```csharp
 var hubConnection = new HubConnectionBuilder()
                             .WithUrl(...)
@@ -19,7 +23,7 @@ var hubConnection = new HubConnectionBuilder()
 
 await hubConnection.StartAsync();
 ```
-### Strongly-type client -> server
+### Creating a strongly-typed client -> server helper
 ```csharp
 // use proxyFactory and hubConnection to create a server proxy
 var clientToServerProxy = proxyFactory.CreateServerProxy(hubConnection);
@@ -28,7 +32,7 @@ var clientToServerProxy = proxyFactory.CreateServerProxy(hubConnection);
 var rval = await clientToServerProxy.SampleMethod("A String",DateTime.Now);
 ```
 
-### Strongly-type server -> client callbacks
+### Creating strongly-typed server -> client callback helper
 ```csharp
 // create your client callback implementation
 IClientContract clientImpl = new MyClientCallbacks();
@@ -43,8 +47,9 @@ var callbackProxy = proxyFactory.CreateClientMapperProxy(hubConnection, client);
 callbackProxy.Dispose();
 ```
 
-## Limitations
-
+## Info, Caveats & Limitations
+- Based on .NET Core 3.0 preview 6
+- Developed with Visual Studio 2019 Community Preview (Version 16.2.0 Preview 3.0)
 - Only async/await enabled contracts are supported
 
     ```csharp
