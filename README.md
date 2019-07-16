@@ -1,9 +1,9 @@
-# Stongly-Typed Client-side Proxies for SignalR Core
+# Type-Safety Enhancements for SignalR Core Clients
 ## Overview
 
-[SignalR Core](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) is awesome! A current limitation, however, is that .NET clients are not strongly-typed.
+[SignalR Core](https://github.com/aspnet/AspNetCore/tree/master/src/SignalR) is awesome! A current limitation, however, is that .NET clients lack compile-time type-safety.
 
-This project adds the following strongly-typed client capabilities:
+This project enables the following type-safety enhancements for SignalR Core clients
 - Automatic, runtime generation of:
     - strongly-typed proxies for Client -> Server calls
     - strongly-typed mapper proxies for Server -> Client callback mapping
